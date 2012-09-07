@@ -33,13 +33,8 @@ def parsePDF(PDFPath):
         device = PDFPageAggregator(rsrcmgr, laparams=laparams)
         interpreter = PDFPageInterpreter(rsrcmgr, device)
 
-        for pageNumber, page in enumerate(doc.get_pages(), start=1):
-            interpreter.process_page(page)
-            pageLayout = device.get_result()
+        detector = Detector(doc.get_pages())
 
-            if pageNumber == 6:
-                content = parseBilling(pageLayout)
-                printBilling(content)
 
 
 def printBilling(textLines):
