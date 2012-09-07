@@ -42,62 +42,6 @@ def printBilling(textLines):
         if ':' in line:
             print(line)
 
-def parseBilling(pageLayout):
-    from collections import defaultdict
-
-    columns = {}
-    columns['left'] = defaultdict(lambda: {})
-    columns['right'] = defaultdict(lambda: {})
-    finalLines = []
-
-    lastUsedX, lastUsedY = 0, 0
-    lastUsedSide = ''
-
-    dividerCoordinate = 310.393
-
-    for char in getChars(pageLayout):
-        if hasattr(char, 'bbox'):
-            (x, y, x1, y1) = char.bbox
-
-            # Rounding up to avoid quirks like chars misaligned by one thousandth of a pt
-            y = int(y)
-            y1 = int(y1)
-
-            text = char.get_text()
-
-            # Small font, used for seconds, is 5 pts in height
-            # We want it to go on the same line as minutes (7 pt)
-            if y1 - y == 5:
-                y = y - 2
-
-            if x < dividerCoordinate:
-                columns['left'][y][x] = text
-                lastUsedSide = 'left'
-            else:
-                columns['right'][y][x] = text
-                lastUsedSide = 'right'
-
-            lastUsedY = y
-            lastUsedX = x
-        else:
-            print('X: %f, Y: %f' % (lastUsedX, lastUsedY))
-            if char.get_text() == '\n':
-                columns[lastUsedSide][lastUsedY][lastUsedX + 0.000001] = ' '
-            else:
-                columns[lastUsedSide][lastUsedY][lastUsedX + 0.000001] = text
-
-    for column in columns:
-        for lineNumber in sorted(columns[column].keys(), reverse=True):
-            line = ''
-
-            for charPos in sorted(columns[column][lineNumber].keys()):
-                char = columns[column][lineNumber][charPos]
-                line += char
-
-            finalLines.append(line)
-
-    return finalLines
-
 def getChars(pageLayout):
     '''
     Chars include actual characters as well as LTAnon objects (spaces, non-printable).
