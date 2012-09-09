@@ -32,9 +32,25 @@ def parsePDF(PDFPath):
         laparams = LAParams()
         device = PDFPageAggregator(rsrcmgr, laparams=laparams)
         interpreter = PDFPageInterpreter(rsrcmgr, device)
+        pages = doc.get_pages()
+        pageLayouts = []
 
-        detector = Detector(doc.get_pages())
+        for index, page in enumerate(pages, start=1):
+            if index == 3:
+                interpreter.process_page(page)
+                pageLayouts.append(device.get_result())
 
+        detector = Detector(pageLayouts)
+
+def sumCostOfCallsTo(dataList, number):
+    cost = 0;
+
+    for data in dataList:
+        print(data['number'])
+        if str(data['number']) == number:
+            cost += float(data['total'])
+
+    return cost
 
 
 def printBilling(textLines):
