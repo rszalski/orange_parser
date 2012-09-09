@@ -6,15 +6,17 @@ Author: Radosław Szalski
 '''
 
 from __future__ import print_function
-import sys
-import re
 from pprint import pprint
+import re
+import sys
+
+from detector import Detector
 
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LTFigure, LTImage, LTTextBox, LTTextLine, LAParams, LTText, LTChar, LTLine, LTAnon
-from pdfminer.pdfparser import PDFDocument, PDFParser
-from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
 from pdfminer.pdfdevice import PDFDevice
+from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
+from pdfminer.pdfparser import PDFDocument, PDFParser
 
 def parsePDF(PDFPath):
     with open(PDFPath, 'rb') as pdfFile:
